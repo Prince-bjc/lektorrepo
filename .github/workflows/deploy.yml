@@ -19,12 +19,6 @@ jobs:
         with:
           python-version: '3.11' # Specify your Python version for Lektor
 
-      - name: Install Lektor
-        run: |
-          pip install lektor
-
-      - name: Build Lektor site
-        run: | lektor build # This generates the static files for your website
 
       - name: Setup SSH
         run: |
