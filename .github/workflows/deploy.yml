@@ -19,14 +19,6 @@ jobs:
         with:
           python-version: '3.11' # Specify your Python version for Lektor
 
-
-      - name: Setup SSH
-        run: |
-            mkdir -p ~/.ssh
-            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan -t rsa $iad1-shared-b7-38.dreamhost.com >> ~/.ssh/known_hosts
-
       - name: Deploy to DreamHost VPS
         run: |
             rsync -avz --delete build/ $dh_x6wgiy@$iad1-shared-b7-38.dreamhost.com:/home/dh_x6wgiy/jeabyi.dreamhosters.com/
