@@ -1,0 +1,38 @@
+
+name: Deploy Lektor Website to DreamHost VPS
+
+on:
+  push:
+    branches:
+      - main # Trigger deployment on push to the main branch 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11' # Specify your Python version for Lektor
+
+      - name: Install Lektor
+        run: |
+          pip install lektor
+
+      - name: Build Lektor site
+        run: | lektor build # This generates the static files for your website
+
+      - name: Setup SSH
+        run: |
+            mkdir -p ~/.ssh
+            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan -t rsa $iad1-shared-b7-38.dreamhost.com >> ~/.ssh/known_hosts
+
+      - name: Deploy to DreamHost VPS
+        run: |
+            rsync -avz --delete build/ $dh_x6wgiy@$iad1-shared-b7-38.dreamhost.com:/home/dh_x6wgiy/jeabyi.dreamhosters.com/
